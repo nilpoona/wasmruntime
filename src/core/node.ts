@@ -131,7 +131,7 @@ export class LocalsNode {
 }
 
 export class ExprNode {
-  insrts: InsertNode[] = []
+  insrts: InstrNode[] = []
   endOp!: Op
 
   load(buffer: Buffer) {
@@ -142,7 +142,7 @@ export class ExprNode {
         break
       }
 
-      const insert = InsertNode.create(opcode)
+      const insert = InstrNode.create(opcode)
       if (!insert) {
         throw new Error(`invalid opcode: 0x${opcode.toString(16)}`)
       }
@@ -161,13 +161,13 @@ const Op = {
 } as const
 type Op = typeof Op[keyof typeof Op]
 
-export class InsertNode {
+export class InstrNode {
   opcode: Op
 
-  static create(opcode: Op): InsertNode | null {
+  static create(opcode: Op): InstrNode | null {
     switch(opcode) {
       case Op.I32Code:
-        return new I32ConstInsertNode(opcode)
+        return new I32ConstInstrNode(opcode)
       case Op.LocalGet:
         return new LocalGetInstrNode(opcode)
       case Op.LocalSet:
@@ -186,7 +186,7 @@ export class InsertNode {
   }
 }
 
-export class I32ConstInsertNode extends InsertNode {
+export class I32ConstInstrNode extends InstrNode {
   num!: number
 
   load(buffer: Buffer) {
@@ -222,7 +222,7 @@ export class ModuleNode {
   }
 }
 
-export class LocalGetInstrNode extends InsertNode {
+export class LocalGetInstrNode extends InstrNode {
   localIdx!: number
 
   load(buffer: Buffer) {
@@ -230,7 +230,7 @@ export class LocalGetInstrNode extends InsertNode {
   }
 }
 
-export class LocalSetinstrNode extends InsertNode {
+export class LocalSetinstrNode extends InstrNode {
   localIdx!: number
 
   load(buffer: Buffer) {
