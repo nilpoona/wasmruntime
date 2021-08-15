@@ -7,4 +7,4 @@ jobs:
       - uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
-      run: deno test --allow-read ./test/load.test.ts
+      - run: deno test --allow-read ./test/load.test.ts
