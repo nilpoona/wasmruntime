@@ -154,6 +154,11 @@ export class ExprNode {
 }
 
 const Op = {
+  I32Eqz: 0x45, 
+  I32LtS: 0x48, 
+  I32GeS: 0x4e, 
+  I32Add: 0x6a, 
+  I32RemS: 0x6f, 
   LocalGet: 0x20,
   LocalSet: 0x21,
   I32Code: 0x41,
@@ -172,6 +177,16 @@ export class InstrNode {
         return new LocalGetInstrNode(opcode)
       case Op.LocalSet:
         return new LocalSetinstrNode(opcode)
+      case Op.I32Add:
+        return new I32AddInstrNode(opcode) 
+      case Op.I32Eqz:
+        return new I32EqzInstrNode(opcode)
+      case Op.I32LtS:
+        return new I32LtSInstrNode(opcode)
+      case Op.I32GeS:
+        return new I32LtSInstrNode(opcode)
+      case Op.I32RemS:
+        return new I32RemSInstrNode(opcode)
       default:
         return null
     }
@@ -271,3 +286,9 @@ export class ExportDescNode {
     this.index = buffer.readU32()
   }
 }
+
+export class I32AddInstrNode extends InstrNode {}
+export class I32EqzInstrNode extends InstrNode {}
+export class I32LtSInstrNode extends InstrNode {}
+export class I32GeSInstrNode extends InstrNode {}
+export class I32RemSInstrNode extends InstrNode {}
