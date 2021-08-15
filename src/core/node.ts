@@ -116,6 +116,8 @@ export class FuncNode {
   }
 }
 
+
+
 export class LocalsNode {
   num!: number
   valType!: ValType
@@ -150,6 +152,8 @@ export class ExprNode {
 }
 
 const Op = {
+  LocalGet: 0x20,
+  LocalSet: 0x21,
   I32Code: 0x41,
   End: 0x0b,
 } as const
@@ -162,6 +166,10 @@ export class InsertNode {
     switch(opcode) {
       case Op.I32Code:
         return new I32ConstInsertNode(opcode)
+      case Op.LocalGet:
+        return new LocalGetInstrNode(opcode)
+      case Op.LocalSet:
+        return new LocalSetinstrNode(opcode)
       default:
         return null
     }
@@ -209,5 +217,21 @@ export class ModuleNode {
     const section = SectionNode.create(sectionId)
     section.load(new Buffer(sectionBuffer))
     return section
+  }
+}
+
+export class LocalGetInstrNode extends InsertNode {
+  localIdx!: number
+
+  load(buffer: Buffer) {
+    this.localIdx = buffer.readU32()
+  }
+}
+
+export class LocalSetinstrNode extends InsertNode {
+  localIdx!: number
+
+  load(buffer: Buffer) {
+    this.localIdx = buffer.readU32()
   }
 }
