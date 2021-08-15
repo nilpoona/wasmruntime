@@ -76,4 +76,10 @@ export class Buffer {
     readBuffer(size:number=this.#buffer.byteLength-this.#cursor): Buffer {
         return new Buffer(this.readBytes(size))
     }
+
+    readName(): string {
+        const size = this.readByte()
+        const bytes = this.readBytes(size)
+        return new TextDecoder("utf-8").decode(bytes.buffer)
+    }
 }
