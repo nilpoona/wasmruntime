@@ -169,6 +169,7 @@ const Op = {
   End: 0x0b,
   If: 0x04,
   Else: 0x05,
+  Call: 0x10,
 } as const
 type Op = typeof Op[keyof typeof Op]
 
@@ -203,6 +204,8 @@ export class InstrNode {
         return new BrInstrNode(opcode)
       case Op.BrIf:
         return new BrInstrNode(opcode)
+      case Op.Call:
+        return new CallInstrNode(opcode)
       default:
         return null
     }
@@ -357,6 +360,15 @@ export class BrIfInstrNode extends InstrNode {
   }
 }
 
+export class CallInstrNode extends InstrNode {
+  funcidx!: FuncIdx
+
+  load(buffer: Buffer) {
+    this.funcidx = buffer.readU32()
+  }
+}
+
+type FuncIdx = number
 type LabelIdx = number
 type S33 = number
 type BlockType = 0x40 | ValType | S33
