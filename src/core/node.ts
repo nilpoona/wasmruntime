@@ -162,6 +162,10 @@ const Op = {
   LocalGet: 0x20,
   LocalSet: 0x21,
   I32Code: 0x41,
+  Block: 0x02,
+  Loop: 0x03,
+  Br: 0x0c,
+  BrIf: 0x0d,
   End: 0x0b,
   If: 0x04,
   Else: 0x05,
@@ -191,6 +195,14 @@ export class InstrNode {
         return new I32RemSInstrNode(opcode)
       case Op.If:
         return new IfInstrNode(opcode)
+      case Op.Block:
+        return new BlockInstrNode(opcode)
+      case Op.Loop:
+        return new LoopInstrNode(opcode)
+      case Op.Br:
+        return new BrInstrNode(opcode)
+      case Op.BrIf:
+        return new BrInstrNode(opcode)
       default:
         return null
     }
@@ -307,6 +319,45 @@ export class IfInstrNode extends InstrNode {
   }
 }
 
+export class BlockInstrNode extends InstrNode {
+  blockType!: BlockType
+  instrs!: ExprNode
+
+  load(buffer: Buffer) {
+    this.blockType = buffer.readByte()
+    this.instrs = new ExprNode()
+    this.instrs.load(buffer)
+  }
+}
+
+export class LoopInstrNode extends InstrNode {
+  blockType!: BlockType
+  instrs!: ExprNode
+
+  load(buffer: Buffer) {
+    this.blockType = buffer.readByte()
+    this.instrs = new ExprNode()
+    this.instrs.load(buffer)
+  }
+}
+
+export class BrInstrNode extends InstrNode {
+  labelIdx!: LabelIdx
+
+  load(buffer: Buffer) {
+    this.labelIdx = buffer.readU32()
+  }
+}
+
+export class BrIfInstrNode extends InstrNode {
+  labelIdx!: LabelIdx
+
+  load(buffer: Buffer) {
+    this.labelIdx = buffer.readU32()
+  }
+}
+
+type LabelIdx = number
 type S33 = number
 type BlockType = 0x40 | ValType | S33
 

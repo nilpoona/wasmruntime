@@ -37,9 +37,18 @@ Deno.test("load add.wat", async () => {
 
 
 Deno.test("load if.wat", async () => {
-const code = await Deno.readFile("data/if.wasm");
-const wasmBuffer = new WasmBuffer(code);
-const wasmModule = new WasmModule();
-wasmModule.load(wasmBuffer);
-assertEquals(4, wasmModule.sections.length)
+  const code = await Deno.readFile("data/if.wasm");
+  const wasmBuffer = new WasmBuffer(code);
+  const wasmModule = new WasmModule();
+  wasmModule.load(wasmBuffer);
+  assertEquals(4, wasmModule.sections.length)
 })
+
+Deno.test("load loop.wat", async () => {
+  const code = await Deno.readFile("data/loop.wasm");
+  const wasmBuffer = new WasmBuffer(code);
+  const wasmModule = new WasmModule();
+  wasmModule.load(wasmBuffer);
+  assertEquals(4, wasmModule.sections.length)
+})
+
