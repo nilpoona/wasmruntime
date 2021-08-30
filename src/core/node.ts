@@ -245,6 +245,11 @@ export class ModuleNode {
     }
   }
 
+  store(buffer: Buffer) {
+    if (this.magic) buffer.writeBytes(this.magic)
+    if (this.version) buffer.writeBytes(this.version)
+  }
+
   loadSection(buffer: Buffer): SectionNode {
     const sectionId = buffer.readByte()
     const sectionSize = buffer.readU32()
